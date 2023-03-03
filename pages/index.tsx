@@ -2,7 +2,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
 import { AudioPlayer } from "@/components/AudioPlayer";
 import Script from 'next/script';
 import { MusicPlayer } from '@/components/MusicPlayer';
@@ -19,9 +18,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Script src={'/scripts/MusicPlayer.js'}/>
-
-      <main className={styles.main}>
+      <main>
 
         <h1>audio file visualizer</h1>
 
@@ -35,27 +32,17 @@ export default function Home() {
           xorigin={'anonymous'}
         />
 
-        <music-player 
-          src="/audio/sinsweeps.mp3" 
-          title="Sick Track" 
-          artist="WilliaMusic" 
-          controls 
-          // muted
-          // loop
-          preload
-          crossorigin='anonymous'
-        ></music-player>
-
         {/* <AudioPlayer /> */}
         {/* <MusicPlayer /> */}
 
         {/* <MusicPlayer /> */}
 
-        <footer>
-          <span>williamusic</span>
-        </footer>
         
       </main>
+      
+      <footer>
+        <span>williamusic</span>
+      </footer>
     </>
   )
 }

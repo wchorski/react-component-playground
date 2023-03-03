@@ -1,15 +1,17 @@
 // ported from
 // credit https://www.youtube.com/watch?v=rkqqBA6ohc0&t=10s
 
-import {useState, useEffect, useRef, useCallback} from 'react'
+import {useState, useEffect, useRef} from 'react'
+import { StyledMusicPlayer } from "@/styles/MusicPlayer.styled";
+import { BsFillPlayFill, BsPauseFill, BsFillSkipBackwardFill, BsFillSkipForwardFill, BsVolumeMuteFill, BsVolumeDownFill, BsVolumeOffFill, BsVolumeUpFill, BsQuestionDiamond} from "react-icons/bs";
 
 export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isControls}: any) => {
 
   const [volumeState, setVolumeState] = useState(0.4)
   const [durationState, setDurationState] = useState(0)
-  const [volumeIcon, setVolumeIcon] = useState('🔈')
+  const [volumeIcon, setVolumeIcon] = useState(<BsVolumeDownFill />)
   const [volPrev, setVolPrev] = useState(volumeState)
-  const [playIconState, setPlayIconState] = useState('▶️')
+  const [playIconState, setPlayIconState] = useState(<BsFillPlayFill />)
   const [audioCtx, setAudioCtx] = useState<AudioContext>()
   const [isPlaying, setIsPlaying] = useState(false)
   const isPlayingRef = useRef<boolean>(false)
@@ -49,10 +51,15 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
         .connect(analyzerNode)
         .connect(newAudioCtx.destination) //TODO input different sources
 
+      // fix blurry lines\
+      if(!canvasRef.current) return console.warn('canvas not found');
+      
+      canvasRef.current.width = canvasRef.current.offsetWidth;
+	    canvasRef.current.height = canvasRef.current.offsetHeight;
+
       setAudioCtx(newAudioCtx)
-
-
-      setCanvasCtxState(canvasRef.current?.getContext('2d'))
+      const newCanvasCtx = canvasRef.current?.getContext('2d')
+      setCanvasCtxState(newCanvasCtx)
 
     } catch (err) {
       console.warn(err);
@@ -72,7 +79,7 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
     analyzerNodeState.getByteFrequencyData(dataArrayState)
 
     canvasCtxState.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-    canvasCtxState.fillStyle = '#e3747453'
+    canvasCtxState.fillStyle = '#78787817' //set in init
     canvasCtxState.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
 
     const barWidth = 3
@@ -105,15 +112,15 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
 
     switch (true) {
       case (vol > 1.5):
-        setVolumeIcon('🔊'); break;
+        setVolumeIcon(<BsVolumeUpFill />); break;
       case (vol > 1):
-        setVolumeIcon('🔉'); break;
+        setVolumeIcon(<BsVolumeDownFill />); break;
       case (vol > 0):
-        setVolumeIcon('🔈'); break;
+        setVolumeIcon(<BsVolumeOffFill />); break;
       case (vol <= 0):
-        setVolumeIcon('🔇'); break;
+        setVolumeIcon(<BsVolumeMuteFill />); break;
       default:
-        setVolumeIcon('error'); break;
+        setVolumeIcon(<BsQuestionDiamond />); break;
     }
     
   }
@@ -140,12 +147,12 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
         await audioElRef.current.pause()
         setIsPlaying(false)
         isPlayingRef.current = false
-        setPlayIconState('▶️')
+        setPlayIconState(<BsFillPlayFill />)
       } else {
         await audioElRef.current.play()
         setIsPlaying(true)
         isPlayingRef.current = true
-        setPlayIconState('⏸️')
+        setPlayIconState(<BsPauseFill />)
         // updateFrequency()
       }
       
@@ -225,8 +232,9 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
   
 
   return (
-    <figure className="audio-player">
-      <button id="btn-test">test butn</button>
+
+    <StyledMusicPlayer className="audio-player">
+
       <figcaption className="audio-title"> {title} </figcaption>
       <figcaption className="audio-artist"> {artist} </figcaption>
 
@@ -236,31 +244,45 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
         controls
         onLoadedMetadata={event => handleLoadedMetaData}
         src={src} 
-        // style={{display: "none"}}
+        style={{display: "none"}}
         crossOrigin={xorigin}
         loop={isLoop}
         onTimeUpdate={e => updateAudioTime()}
       ></audio>
 
-      <canvas ref={canvasRef} className="visualizer" style={{width: "100%", height: "60px"}}></canvas>
+      <canvas ref={canvasRef} className="visualizer" style={{width: "100%", height: "100px"}}></canvas>
       
       <div className='audio-controls'>
         <div className='audio-transport'>
-          <button 
+          {/* <button 
             className="prev-btn" 
             type="button"
             // onClick={e => }
-          > ⏮️ </button>
+          > <BsFillSkipBackwardFill /> </button> */}
           <button 
             className="play-btn" 
             type="button"
             onClick={e => togglePlay()}
           > {playIconState} </button>
-          <button 
+          {/* <button 
             className="next-btn" 
             type="button"
             // onClick={e => }
-          > ⏭️ </button>
+          > <BsFillSkipForwardFill /> </button> */}
+        </div>
+        
+        <div className="progress-indicator">
+          <span ref={currentTimeElRef} className="audio-time current-time">0:0</span>
+          <input 
+            ref={rangeProgressBar}
+            className="progress-bar" 
+            type="range" 
+            max="100" 
+            // value="0" 
+            defaultValue={"0"}
+            onChange={e => handleSeekTo(Number(e.target.value))}
+          />
+          <span ref={durationTimeElRef} className="audio-time duration">0:00</span>
         </div>
 
         <div className="volume-bar">
@@ -285,20 +307,7 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
       </div>
 
 
-      <div className="progress-indicator">
-        <span ref={currentTimeElRef} className="audio-time current-time">0:0</span>
-        <input 
-          ref={rangeProgressBar}
-          className="progress-bar" 
-          type="range" 
-          max="100" 
-          // value="0" 
-          defaultValue={"0"}
-          onChange={e => handleSeekTo(Number(e.target.value))}
-        />
-        <span ref={durationTimeElRef} className="audio-time duration">0:00</span>
-      </div>
 
-    </figure>
+    </StyledMusicPlayer>
   )
 }
