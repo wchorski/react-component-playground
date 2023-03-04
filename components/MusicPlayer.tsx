@@ -79,7 +79,7 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
     analyzerNodeState.getByteFrequencyData(dataArrayState)
 
     canvasCtxState.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-    canvasCtxState.fillStyle = '#78787817' //set in init
+    canvasCtxState.fillStyle = '#163532' //set in init
     canvasCtxState.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
 
     const barWidth = 3

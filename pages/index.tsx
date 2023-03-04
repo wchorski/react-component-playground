@@ -5,6 +5,7 @@ import { Inter } from '@next/font/google'
 import { AudioPlayer } from "@/components/AudioPlayer";
 import Script from 'next/script';
 import { MusicPlayer } from '@/components/MusicPlayer';
+import { AudioVisualizer } from '@/components/AudioVizParent';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,23 +21,10 @@ export default function Home() {
 
       <main>
 
-        <h1>audio file visualizer</h1>
+        <h1>React Component Playground</h1>
 
-        <MusicPlayer
-          src={'/audio/piano.mp3'}
-          title={'React Song'}
-          artist={'React Artst'}
-          controls={true}
-          isPreload={true}
-          isLoop={false}
-          xorigin={'anonymous'}
-        />
-
-        {/* <AudioPlayer /> */}
-        {/* <MusicPlayer /> */}
-
-        {/* <MusicPlayer /> */}
-
+        
+        <AudioVisualizer />
         
       </main>
       

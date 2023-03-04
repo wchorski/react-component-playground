@@ -69,7 +69,7 @@ export const StyledMusicPlayer = styled.figure`
   
   .audio-time{
     opacity: .7;
-    font-size: .7rem;
+    /* font-size: .7rem; */
     font-weight: 100;
     margin: 0 .4em;
   }
