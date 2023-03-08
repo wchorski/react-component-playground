@@ -40,7 +40,7 @@ const All_Components = () => {
       <section>
         <h2>My Audio Visualizer </h2>
         
-        <AudioVisualizer />
+        {/* <AudioVisualizer /> */}
       </section>
 
     </main>

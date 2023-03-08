@@ -1,46 +1,77 @@
 // cred - https://github.com/philnash/react-web-audio/blob/master/src/AudioVisualiser.js
 // ported to use hooks
+import { bar_spectrum } from "@/libs/visual_presets/bar_spectrum";
 
 import React, { Component, useEffect, useState, useRef } from 'react';
 
-export const AudioVisualiser = ({audioData}) => {
+export const AudioVisualiser = ({ 
+  // analyzerNodeState, dataArrayState,
+  mic,
+}) => {
+
   const canvasRef = useRef(null)
+  const [dataArrayState, setDataArrayState] = useState(mic.freqData)
+  const [analyzerNodeState, setanalyzerNodeState] = useState(mic.analyser)
+  // const canvasCtxState = useRef()
+
+  const isPlayingRef = useRef(true)
   const isMounted = useRef()
 
   useEffect(() => {
 
-    (!isMounted.current) 
-      ? isMounted.current = true // mount logic
-      : draw() // update logic
+    if(!isMounted.current){
+      console.log('mic, ', mic.freqData);
+      isMounted.current = true // mount logic
+    } else {
+      
+      draw() // update logic
+    }
   
-    // return () => {
+    return () => {
+      cancelAnimationFrame(draw())
+    }
   })
   
 
 
   // Oscilloscope
 
-  function draw() {
-    const canvas = canvasRef.current;
-    const height = canvas.height;
-    const width = canvas.width;
-    const context = canvas.getContext('2d');
-    let x = 0;
-    const sliceWidth = (width * 1.0) / audioData.length;
+  const draw = () => {
 
-    context.lineWidth = 2;
-    context.strokeStyle = '#000000';
-    context.clearRect(0, 0, width, height);
+    // ! my implanted code
+    // if(!isPlayingRef.current) return 
+    
+    // if(!canvasRef.current || !dataArrayState || !canvasCtxRef.current || !analyzerNodeState) return console.warn('updateFrequency ERROR');
+    if(!canvasRef.current)  return console.warn('1 updateFrequency canvasRef.current ERROR');
+    const canvasCtxState = canvasRef.current.getContext('2d');
+    // if(!dataArrayState) return console.warn('2 updateFrequency dataArrayState ERROR', dataArrayState);
+    if(!mic.freqData) return console.warn('2 updateFrequency dataArrayState ERROR', mic.freqData);
+    if(!canvasCtxState) return console.warn('3 updateFrequency canvasCtxState ERROR');
+    if(!analyzerNodeState) return console.warn('4 updateFrequency analyzerNodeState ERROR');
+    
+    analyzerNodeState.getByteFrequencyData(dataArrayState)
 
-    context.beginPath();
-    context.moveTo(0, height / 2);
-    for (const item of audioData) {
-      const y = (item / 255.0) * height;
-      context.lineTo(x, y);
-      x += sliceWidth;
+    canvasCtxState.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+    canvasCtxState.fillStyle = '#163532' //set in init
+    canvasCtxState.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+
+    const barWidth = 3
+    const gap = 2
+    const bufferLength = analyzerNodeState ? analyzerNodeState?.frequencyBinCount : 0
+    const barCount = bufferLength / ((barWidth + gap) - gap)
+    let x = 0
+
+    for(let i = 0; i < barCount; i++){
+      const perc = (dataArrayState[i] * 100) / 255
+      const h = (perc * canvasRef.current.height) / 100
+
+      canvasCtxState.fillStyle = `rgba(${dataArrayState[i]}, 230, 200, 1)`
+      canvasCtxState.fillRect(x, canvasRef.current.height - h, barWidth, h)
+
+      x += barWidth + gap
     }
-    context.lineTo(x, height / 2);
-    context.stroke();
+
+    requestAnimationFrame(draw)
 
   }
 

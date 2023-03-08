@@ -6,6 +6,8 @@ import { AudioPlayer } from "@/components/AudioPlayer";
 import Script from 'next/script';
 import { MusicPlayer } from '@/components/MusicPlayer';
 import { AudioVisualizer } from '@/components/AudioVizParent';
+import { Audio_w_Mic } from '@/components/Audio_w_Mic.jsx';
+import { GPT_AudioVis } from '@/components/ChatGPT/GPT_AudioVis';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +26,9 @@ export default function Home() {
         <h1>React Component Playground</h1>
 
         
-        <AudioVisualizer />
+        {/* <AudioVisualizer /> */}
+        <GPT_AudioVis />
+        {/* <Audio_w_Mic /> */}
         
       </main>
       

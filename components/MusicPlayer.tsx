@@ -30,7 +30,7 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
   const [dataArrayState, setDataArrayState] = useState<Uint8Array>()
 
   async function initializeAudio() {
-    if(!audioElRef.current) return console.warn('-- No Audio Found --');
+    if(!audioElRef.current) return console.warn('-- No Audio element Found --');
     
     try {
       const newAudioCtx = new AudioContext()
@@ -44,7 +44,7 @@ export const MusicPlayer = ({src, title, artist, xorigin, isLoop, isPreload, isC
       const bufferLength = analyzerNode.frequencyBinCount
       const dataArray = new Uint8Array(bufferLength)
       setDataArrayState(dataArray)
-      analyzerNode.getByteFrequencyData(dataArray)
+      analyzerNode.getByteFrequencyData(dataArray) //! freq vs timedomain data
 
       track
         .connect(gainNode)

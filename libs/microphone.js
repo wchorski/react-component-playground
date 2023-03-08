@@ -1,3 +1,5 @@
+// cred: Franks Lab -- https://www.youtube.com/watch?v=VXWvfrmpapI&t=574s
+
 /* eslint-env browser */
 export class Microphone{
 
@@ -64,11 +66,18 @@ export class Microphone{
     await this.#registerStream(stream);
   }
 
+  // ! ocsiliscope? idk looks messy
   getSamples(){
     this.analyser.getByteTimeDomainData(this.freqData)
     let normSamples = [...this.freqData].map(e => e / 128 - 1)
     // let normSamples = [...this.freqData].map(e => e / 2)
     return normSamples
+  }
+
+  // ! freq spectrum
+  getSamplesFreq(){ 
+    this.analyser.getByteFrequencyData(this.freqData)
+    return this.freqData
   }
 
   getVolume(){
