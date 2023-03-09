@@ -3,10 +3,11 @@ import {useEffect, useState, useRef} from 'react'
 export const Spectrum = ({audioCtx, selectedMicSource}: any) => {
 
   const canvasRef = useRef<HTMLCanvasElement|null>(null);
+  const isStopped = useRef<boolean>(false)
 
   async function analyzeAudio(){
     if(!selectedMicSource) return console.warn('NO AUDIO in Spectrum');
-    console.log('selectedMicSource, ', selectedMicSource);
+    // console.log('selectedMicSource, ', selectedMicSource);
     await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: selectedMicSource.deviceId } } })
       .then(stream => {
         const sourceNode = audioCtx.createMediaStreamSource(stream);
@@ -19,7 +20,7 @@ export const Spectrum = ({audioCtx, selectedMicSource}: any) => {
         if(!canvas) return
         const canvasCtx = canvas?.getContext('2d');
 
-        const draw = () => {
+        const draw: any = () => {
           analyzerNode.getByteFrequencyData(frequencyData);
           canvasCtx?.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -34,6 +35,7 @@ export const Spectrum = ({audioCtx, selectedMicSource}: any) => {
             x += barWidth + 1;
           }
 
+          if(isStopped.current) return cancelAnimationFrame(draw)
           requestAnimationFrame(draw);
         };
 
@@ -42,8 +44,12 @@ export const Spectrum = ({audioCtx, selectedMicSource}: any) => {
   }
 
 
-  useEffect(() => {
+  useEffect(():any => {
+
+    isStopped.current = false
     analyzeAudio()
+  
+    return () => isStopped.current = true
   
     // return () => 
   }, [audioCtx, selectedMicSource])

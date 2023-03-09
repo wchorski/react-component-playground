@@ -5,9 +5,9 @@ import { Inter } from '@next/font/google'
 import { AudioPlayer } from "@/components/AudioPlayer";
 import Script from 'next/script';
 import { MusicPlayer } from '@/components/MusicPlayer';
-import { AudioVisualizer } from '@/components/AudioVizParent';
+// import { AudioVisualizer } from '@/components/AudioVizParent';
 import { Audio_w_Mic } from '@/components/Audio_w_Mic.jsx';
-import { GPT_AudioVis } from '@/components/AudioVisualizer/AudioVisualizer';
+import { AudioVisualizer } from '@/components/AudioVisualizer/AudioVisualizer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +27,7 @@ export default function Home() {
 
         
         {/* <AudioVisualizer /> */}
-        <GPT_AudioVis />
+        <AudioVisualizer />
         {/* <Audio_w_Mic /> */}
         
       </main>

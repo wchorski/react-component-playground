@@ -1,16 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Spectrum } from "@/components/AudioVisualizer/Spectrum";
 import { Oscilliscope } from "@/components/AudioVisualizer/Oscilliscope";
+import { Spiral } from "@/components/AudioVisualizer/Spiral";
+import { Chameleon } from "@/components/AudioVisualizer/Chameleon";
+import { Snail } from "@/components/AudioVisualizer/Snail";
 import Select from 'react-select';
 import { useLocalStorage } from "@/libs/useLocalStorage";
+import { StyledOverlayMenu } from "@/styles/OverlayMenu.styled";
 
-export function GPT_AudioVis() {
+export function AudioVisualizer() {
 
   const [micSources, setMicSources] = useState<MediaDeviceInfo[]>([]);
   const [selectedMicSource, setSelectedMicSource] = useLocalStorage('VIZ__SELECTED_MIC', {"deviceId":"default","kind":"audioinput","label":"Default - Microphone","groupId":"12345"});
   const audioContext = useRef<AudioContext|null>(null)
 
-  const [presetArray, setPresetArray] = useState([{value: 'spectrum', label: 'Spectrum'}, {value: 'oscilliscope', label: 'Oscilliscope'}])
+  const [presetArray, setPresetArray] = useState([
+    {value: 'spiral', label: 'Spiral'}, 
+    {value: 'spectrum', label: 'Spectrum'}, 
+    {value: 'oscilliscope', label: 'Oscilliscope'},
+    {value: 'chameleon', label: 'Chameleon'},
+    {value: 'snail', label: 'Snail'},
+  ])
   const [selectedPrestName, setSelectedPrestName] = useLocalStorage('VIZ__CURRENT_PRESET', {value: 'spectrum', label: 'Spectrum'})
   const [currVizComp, setCurrVizComp] = useState<any |undefined>()
 
@@ -61,6 +71,30 @@ export function GPT_AudioVis() {
         />)
         break;
 
+      case 'spiral':
+        setCurrVizComp(<Spiral 
+          audioCtx={audioContext.current} 
+          selectedMicSource={selectedMicSource}
+          fftSize={512}
+        />)
+        break;
+
+      case 'chameleon':
+        setCurrVizComp(<Chameleon 
+          audioCtx={audioContext.current} 
+          selectedMicSource={selectedMicSource}
+          fftSize={512}
+        />)
+        break;
+
+      case 'snail':
+        setCurrVizComp(<Snail 
+          audioCtx={audioContext.current} 
+          selectedMicSource={selectedMicSource}
+          fftSize={512}
+        />)
+        break;
+
       default:
         setCurrVizComp(<Spectrum 
           audioCtx={audioContext.current} 
@@ -105,15 +139,24 @@ export function GPT_AudioVis() {
   
   if(!isLoaded) return <p>Loading...</p>
 
-  return (
-    <div>
+  return (<>
+    <StyledOverlayMenu>
+      <button className='handle'> {'<'} </button>
+
       {micSources && selectedMicSource &&(
         <div className="mic-cont">
         <label> Select microphone: </label>
           <Select 
+            className='select-input'
             defaultValue={selectedMicSource}
             onChange={setSelectedMicSource}
             options={micSources}
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                borderColor: state.isFocused ? 'grey' : 'red',
+              }),
+            }}
           />
         </div>
       )}
@@ -123,17 +166,24 @@ export function GPT_AudioVis() {
         <div className="preset-cont">
           <label htmlFor="preset">preset:</label>
           <Select 
+            className='select-input'
             defaultValue={selectedPrestName}
             onChange={handlePresetChange}
             options={presetArray}
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                borderColor: state.isFocused ? 'grey' : 'red',
+              }),
+            }}
           />
         </div>
       )}
+    </StyledOverlayMenu>
 
-      {audioContext.current && selectedMicSource && currVizComp && selectedPrestName &&(
-        <div className='viz-cont'>{currVizComp ? currVizComp : null}</div>
-      )}
+    {audioContext.current && selectedMicSource && currVizComp && selectedPrestName &&(
+      <div className='viz-cont'>{currVizComp ? currVizComp : null}</div>
+    )}
 
-    </div>
-  );
+  </>);
 }
