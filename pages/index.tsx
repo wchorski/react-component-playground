@@ -7,7 +7,7 @@ import Script from 'next/script';
 import { MusicPlayer } from '@/components/MusicPlayer';
 import { AudioVisualizer } from '@/components/AudioVizParent';
 import { Audio_w_Mic } from '@/components/Audio_w_Mic.jsx';
-import { GPT_AudioVis } from '@/components/ChatGPT/GPT_AudioVis';
+import { GPT_AudioVis } from '@/components/AudioVisualizer/AudioVisualizer';
 
 const inter = Inter({ subsets: ['latin'] })
 
