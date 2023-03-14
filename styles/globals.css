@@ -131,6 +131,8 @@ a {
 button{
   cursor: pointer;
   transition: .2s;
+  padding: 0 1em;
+  border-radius: 3px;
 }
 
 a:hover,

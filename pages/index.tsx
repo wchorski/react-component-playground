@@ -8,6 +8,7 @@ import { MusicPlayer } from '@/components/MusicPlayer';
 // import { AudioVisualizer } from '@/components/AudioVizParent';
 import { Audio_w_Mic } from '@/components/Audio_w_Mic.jsx';
 import { AudioVisualizer } from '@/components/AudioVisualizer/AudioVisualizer';
+import { PixelPhysics } from "@/components/FranksLab/PixelPhysics";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,10 +26,9 @@ export default function Home() {
 
         <h1>React Component Playground</h1>
 
-        
+      <PixelPhysics />
         {/* <AudioVisualizer /> */}
-        <AudioVisualizer />
-        {/* <Audio_w_Mic /> */}
+
         
       </main>
       
