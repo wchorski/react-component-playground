@@ -1,6 +1,7 @@
 // cred -Franks Lab - https://www.youtube.com/watch?v=vAJEHf92tV0
 
 import {useRef, useState, useEffect} from 'react'
+import Select from 'react-select';
 
 export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
 
@@ -10,6 +11,13 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
   const effectRef = useRef(null)
   const imgRef = useRef(null)
   const radiusRef = useRef(2000)
+
+  const [imgURLState, setImgURLState] = useState({value: '/img/kirby.png', label: 'Kirby'})
+  const [imgURLs, setImgURLs] = useState([
+    {value: '/img/split skream.png', label: 'Split Skream'}, 
+    {value: '/img/kirby.png', label: 'Kirby'}, 
+    {value: '/img/13amp.png', label: '13 Amp'}, 
+  ])
 
   async function analyzeAudio(){
 
@@ -57,7 +65,7 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
 
           effect.draw(ctx)
           softVol = (volume > 26200) ? volume : volume * 0.01 //? expand volume. cut off anything below that's too quiet
-          console.log('softVol, ', softVol);
+          // console.log('softVol, ', softVol);
           effect.update(softVol)
     
           if(isStopped.current) return cancelAnimationFrame(animate)
@@ -67,6 +75,10 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
 
       })
   }
+  function handleWarp(){
+    // effectState.warp()
+    effectRef.current.warp()
+  }
 
   useEffect(() => {
     isStopped.current = false
@@ -75,10 +87,13 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
     return () => isStopped.current = true
   }, [audioCtx, selectedMicSource])
 
-  function handleWarp(){
-    // effectState.warp()
-    effectRef.current.warp()
-  }
+  useEffect(() => {
+    analyzeAudio()
+  
+    // return () => 
+  }, [imgURLState])
+  
+
 
   
   if(!effectRef || !canvasRef || !canvasCtx || !imgRef) return <p> Loading...</p>
@@ -89,6 +104,28 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
         onClick={e => handleWarp()}
       >Warp</button>
 
+      <input type={'text'} defaultValue={imgURLState.value}
+        onChange={e => setImgURLState(e.target.value)}
+      />
+
+      {imgURLs && imgURLState &&(
+        <div className="mic-cont">
+        <label> Select Image: </label>
+          <Select 
+            className='select-input'
+            defaultValue={imgURLState}
+            onChange={setImgURLState}
+            options={imgURLs}
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                borderColor: state.isFocused ? 'grey' : 'red',
+              }),
+            }}
+          />
+        </div>
+      )}
+
       {/* <label>Radius</label>
       <input type={'range'} min={10} max={50000} 
         onChange={e => radiusRef.current = e.target.value}
@@ -96,7 +133,7 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
     </div>
 
     <canvas ref={canvasRef}></canvas>
-    <img ref={imgRef} src={'/img/split skream.png'} style={{display: 'none'}}/>
+    <img ref={imgRef} src={imgURLState.value} style={{display: 'none'}}/>
 
   </>)
 }
