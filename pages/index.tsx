@@ -9,6 +9,7 @@ import { MusicPlayer } from '@/components/MusicPlayer';
 import { Audio_w_Mic } from '@/components/Audio_w_Mic.jsx';
 import { AudioVisualizer } from '@/components/AudioVisualizer/AudioVisualizer';
 import { PixelPhysics } from "@/components/FranksLab/PixelPhysics";
+import { PixelPhysicswMusic } from "@/components/AudioVisualizer/PixelPhysicswMusic";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,8 +27,12 @@ export default function Home() {
 
         <h1>React Component Playground</h1>
 
-      <PixelPhysics />
-        {/* <AudioVisualizer /> */}
+        {/* <PixelPhysicswMusic 
+          audioCtx={null} 
+          selectedMicSource={null}
+          fftSize={512}
+        /> */}
+        <AudioVisualizer />
 
         
       </main>

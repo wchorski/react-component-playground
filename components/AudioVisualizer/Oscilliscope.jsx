@@ -38,8 +38,8 @@ export const Oscilliscope = ({audioCtx, selectedMicSource, fftSize}) => {
         const analyzerNode = audioCtx.createAnalyser();
         sourceNode.connect(analyzerNode);
         analyzerNode.connect(audioCtx.destination);
-        
         const frequencyData = new Uint8Array(analyzerNode.frequencyBinCount);
+
         const canvas = canvasRef.current;
         if(!canvas) return
         const canvasCtx = canvas?.getContext('2d');
@@ -78,8 +78,7 @@ export const Oscilliscope = ({audioCtx, selectedMicSource, fftSize}) => {
           for(let i = 0; i < normSamples.length; i++){
             sum += normSamples[i] * normSamples[i]
           }
-          let vol = Math.sqrt(sum / normSamples.length)
-          const volume = vol
+          const volume = Math.sqrt(sum / normSamples.length)
       
           angle += rotSpeed + (-volume * 0.05)
           canvasCtx?.save()

@@ -32,7 +32,7 @@ function Playlist() {
                 <i className="far fa-heart fa-lg"> ❤️ </i>
               </button>
               <button className="options_song playlist_btn">
-                <i class="fas fa-ellipsis-v fa-lg"> ⚫️ </i>
+                <i className="fas fa-ellipsis-v fa-lg"> ⚫️ </i>
               </button>
             </div>
           </li>
