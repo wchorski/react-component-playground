@@ -39,7 +39,7 @@ export const PixelPhysicswMusic = ({audioCtx, selectedMicSource, fftSize}) => {
 
         biquadFilter.type = "bandpass";
         biquadFilter.frequency.value = 200;
-        biquadFilter.gain.value = 1;
+        biquadFilter.gain.value = 30;
 
         if(!canvasRef) return
         const canvas = canvasRef.current

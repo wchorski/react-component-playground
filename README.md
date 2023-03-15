@@ -8,6 +8,12 @@ Here lies my space for building and testing components. Mostly from learned tuto
 > [!note] uses NextJS framework for easy out of the box dev features.
 
 
+## Audio Visualizer notes
+- make each preset incorperate
+  - bass reactive
+  - mid/treble reactive
+  - some swappable image attribute (user generated)
+
 ---
 
 ## Credits

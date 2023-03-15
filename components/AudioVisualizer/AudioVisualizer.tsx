@@ -5,6 +5,7 @@ import { Spiral } from "@/components/AudioVisualizer/Spiral";
 import { Chameleon } from "@/components/AudioVisualizer/Chameleon";
 import { Snail } from "@/components/AudioVisualizer/Snail";
 import { PixelPhysicswMusic } from "@/components/AudioVisualizer/PixelPhysicswMusic";
+import { LavaLamp } from "@/components/AudioVisualizer/LavaLamp";
 import Select from 'react-select';
 import { useLocalStorage } from "@/libs/useLocalStorage";
 import { StyledOverlayMenu } from "@/styles/OverlayMenu.styled";
@@ -22,6 +23,7 @@ export function AudioVisualizer() {
     {value: 'chameleon', label: 'Chameleon'},
     {value: 'snail', label: 'Snail'},
     {value: 'pixel-fizz', label: 'Pixel Fizz'},
+    {value: 'lavalamp', label: 'Lava Lamp'},
   ])
   const [selectedPrestName, setSelectedPrestName] = useLocalStorage('VIZ__CURRENT_PRESET', {value: 'spectrum', label: 'Spectrum'})
   const [currVizComp, setCurrVizComp] = useState<any |undefined>()
@@ -99,6 +101,14 @@ export function AudioVisualizer() {
 
       case 'pixel-fizz':
         setCurrVizComp(<PixelPhysicswMusic 
+          audioCtx={audioContext.current} 
+          selectedMicSource={selectedMicSource}
+          fftSize={512}
+        />)
+        break;
+
+      case 'lavalamp':
+        setCurrVizComp(<LavaLamp 
           audioCtx={audioContext.current} 
           selectedMicSource={selectedMicSource}
           fftSize={512}
