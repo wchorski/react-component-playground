@@ -145,3 +145,30 @@ button:hover{
     color-scheme: dark;
   }
 }
+
+ul.vacation-days li{
+
+  padding: .5em;
+  border: dashed 1px grey;
+}
+
+form.date-picker{
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  max-width: 20em;
+}
+
+form.date-picker label{
+  display: flex;
+  flex-direction: column;
+}
+
+.error{
+  background-color: red;
+  color: white;
+}
+.success{
+  background-color: green;
+  color: white;
+}

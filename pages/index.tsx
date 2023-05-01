@@ -13,6 +13,7 @@ import { SlimeBlobs } from "@/components/FranksLab/SlimeBlobs";
 import { SmokeMonster } from "@/components/FranksLab/SmokeMonster";
 import { LavaLamp } from "@/components/FranksLab/LavaLamp";
 import { PixelPhysicswMusic } from "@/components/AudioVisualizer/PixelPhysicswMusic";
+import { AvailabilityChecker } from '@/components/InputElements/AvailabilityChecker';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,13 +28,13 @@ export default function Home() {
       </Head>
 
       <main>
-
+        <AvailabilityChecker />
         {/* <PixelPhysicswMusic 
           audioCtx={null} 
           selectedMicSource={null}
           fftSize={512}
         /> */}
-        <AudioVisualizer />
+        {/* <AudioVisualizer /> */}
         {/* <LavaLamp /> */}
 
 
