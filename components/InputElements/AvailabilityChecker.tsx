@@ -11,6 +11,10 @@ const vacationDays = [
     durationInHours: "24"
   },
   {
+    dateTime: "2023-05-02T05:00:00Z",
+    durationInHours: "12"
+  },
+  {
     dateTime: "2023-06-01T05:00:00Z",
     durationInHours: "24"
   },
@@ -62,7 +66,7 @@ export function AvailabilityChecker() {
           setMessage("Selected vacation period is available")
           break;
         default:
-          setMessage("error in date overlap");
+          setMessage("DEFAULT: Selected date period OVERLAPS with an existing vacation day");
           break;
       }
     }
@@ -93,13 +97,13 @@ export function AvailabilityChecker() {
         <form onSubmit={handleSubmit} className="date-picker">
           <label>
             Date Picked
-            <input type="datetime-local" name="date" value={formValues.date} onChange={handleChange}/>
+            <input type="datetime-local" name="date" value={formValues.date} onChange={handleChange} required/>
           </label>
           <br />
 
           <label>
             Duration in Hours
-            <input type="text" name="durationInHours" value={formValues.durationInHours} onChange={handleChange} />
+            <input type="text" name="durationInHours" value={formValues.durationInHours} onChange={handleChange} required/>
           </label>
           <br />
 
