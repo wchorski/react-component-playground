@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { dateCheckAvailable } from "../../libs/dateCheck";
 
 type FormVals = {
   date: string,
@@ -29,6 +30,9 @@ const vacationDays = [
 ];
 
 export function AvailabilityChecker() {
+
+  const inputRangeRef = useRef<HTMLInputElement>(null)
+  const [hoursSliderVal, setHoursSliderVal] = useState('.25')
   const [message, setMessage] = useState("");
   const [formValues, setformValues] = useState<FormVals>({
     date: '',
@@ -41,35 +45,9 @@ export function AvailabilityChecker() {
     // console.table(formValues)
     if(!durationInHours.match(/^[0-9]+(\.[0-9]+)?$/)) return setMessage('Hours must only contain numbers "0-9" and one decimal "." ')
     
-
-    const inputDate = new Date(date)
-    const durationMs = Number(durationInHours) * 60 * 60 * 1000
-    const endDate = new Date(inputDate.getTime() + durationMs)
-
-    for (let i = 0; i < vacationDays.length; i++) {
-      const vacationStart = new Date(vacationDays[i].dateTime)
-      const vacationDurationMs = Number(vacationDays[i].durationInHours) * 60 * 60 * 1000;
-      const vacationEnd = new Date( vacationStart.getTime() + vacationDurationMs)
-
-      // console.table({
-      //   inputDate,
-      //   endDate,
-      //   vacationStart,
-      //   vacationEnd,
-      // })
-
-      switch (true) {
-        case (inputDate < vacationEnd):
-          setMessage("Selected date period OVERLAPS with an existing vacation day")
-          break;
-        case (endDate > vacationStart):
-          setMessage("Selected vacation period is available")
-          break;
-        default:
-          setMessage("DEFAULT: Selected date period OVERLAPS with an existing vacation day");
-          break;
-      }
-    }
+    dateCheckAvailable(date, durationInHours, vacationDays)
+      ? setMessage('Date is Available')
+      : setMessage('CONFLICT was found');
   }
 
   const handleChange = (event:any) => {
@@ -103,7 +81,13 @@ export function AvailabilityChecker() {
 
           <label>
             Duration in Hours
-            <input type="text" name="durationInHours" value={formValues.durationInHours} onChange={handleChange} required/>
+            <input type="range" min={.25} max={24} step={.25} name="durationInHours" value={formValues.durationInHours} required ref={inputRangeRef} 
+              onChange={(e) => {
+                handleChange(e)
+                setHoursSliderVal(String(e.target.value))
+              }}
+            />
+            <span>{hoursSliderVal} hours </span>
           </label>
           <br />
 

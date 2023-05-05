@@ -10,5 +10,9 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   
-  res.status(200).json({ name: 'John Doe' })
+  res.status(200).json({ 
+    name: 'google redirect worked', 
+    res: res.params,
+  })
+  res.redirect(200, '/google/redirect')
 }
