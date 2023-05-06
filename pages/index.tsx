@@ -28,7 +28,9 @@ export default function Home() {
       </Head>
 
       <main>
-        <AvailabilityChecker />
+        {/* <AvailabilityChecker /> */}
+
+
         {/* <PixelPhysicswMusic 
           audioCtx={null} 
           selectedMicSource={null}

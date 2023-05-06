@@ -3,12 +3,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
-
-const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY || 'NO_KEY_SET'
-const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL || 'NO_EMAIL_SET'
-const CAL_ID = 'cute-fruit-kypn@winged-standard-385618.iam.gserviceaccount.com'
-// const CAL_ID = 'cutefruit88@gmail.com'
-// const CAL_ID = 'primary'
+import creds from "../../private/cutefruit-project.json";
+// const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY || 'NO_KEY_SET'
+// const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL || 'NO_EMAIL_SET'
+const GOOGLE_PRIVATE_KEY = creds.private_key|| 'NO_KEY_SET'
+const GOOGLE_CLIENT_EMAIL = creds.client_email || 'NO_EMAIL_SET'
+const CAL_ID = 'primary'
 // const CAL_ID = '9d65e7818e35deef745491be0f97859a6c0139ced057742ce4e8fe2118d7faf4@group.calendar.google.com'
 
 type GEvent = {

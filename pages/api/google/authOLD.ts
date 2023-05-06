@@ -9,7 +9,7 @@ type Data = {
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'NOCLIENTID'
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'NOCLIENTSECRET'
-const REDIRECT_URI = 'http://localhost:3000/api/google/redirect'
+const REDIRECT_URI = process.env.REDIRECT_URI || "no_redirect_uri"
 
 
 // Create a new instance of oAuth and set our Client ID & Client Secret.
