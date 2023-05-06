@@ -7,17 +7,42 @@ export const  EventForm = () => {
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [attendees, setAttendees] = useState('');
+  
 
   const handleCreateEvent = async (event:any) => {
     event.preventDefault();
 
+    // const eventDetails = {
+    //   title,
+    //   location,
+    //   description,
+    //   startDate,
+    //   endDate,
+    // }
     const eventDetails = {
-      title,
-      location,
-      description,
-      startDate,
-      endDate,
-    };
+      summary: title,
+      description: description,
+      start: {
+        dateTime: startDate + ':00',
+        timeZone: 'America/Chicago',
+      },
+      end: {
+        dateTime: endDate +':00',
+        timeZone: 'America/Chicago',
+      },
+      // todo: Attendees does not work on Service Accounts
+      // attendees: [
+      //   {email: attendees}
+      // ],
+      // reminders: {
+      //   useDefault: false,
+      //   overrides: [
+      //     {method: 'email', minutes: 24 * 60},
+      //     {method: 'popup', minutes: 10},
+      //   ],
+      // },
+    }
 
     // console.log({eventDetails})
 
@@ -28,8 +53,10 @@ export const  EventForm = () => {
   
         body: JSON.stringify(eventDetails)
       })
+
       const data = await res.json()
-      console.log('event insert patch res, ', data);
+      if(res.status === 200) return console.log('api success, ', data)
+      if(res.status !== 200)return console.error('api failed, ', data)
  
       // routerPush(`/planner/${query.id}`) 
 
@@ -86,6 +113,7 @@ export const  EventForm = () => {
         />
       </label>
       <br />
+
       <label>
         End date:
         <input
@@ -95,6 +123,17 @@ export const  EventForm = () => {
         />
       </label>
       <br />
+
+      <label>
+        Attendees:
+        <input
+          type="email"
+          value={attendees}
+          onChange={(event) => setAttendees(event.target.value)}
+        />
+      </label>
+      <br />
+
       <button type="submit">Create Event</button>
     </form>
   </>)
